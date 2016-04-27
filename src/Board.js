@@ -79,12 +79,30 @@
     //
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
+      var row = this.rows()[rowIndex];
+      var count = _.reduce(row, function(count, item) {
+        return count + item;
+      });
+
+      if ( count > 1 ) {
+        return true;
+      }
       return false; // fixme
     },
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
-      return false; // fixme
+      var rows = this.rows();
+      // loop through the rows
+      for ( var i = 0; i < rows.length; i++ ) {
+        // call the hasRowConflictAt(index of Rows) -> store in a variable called result
+        var result = this.hasRowConflictAt(i);
+        // If result = true, then return true
+        if ( result ) {
+          return true;
+        }
+      }
+      return false;
     },
 
 
@@ -94,12 +112,40 @@
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
+      // var intermediary = [1, 1, 0, 0]; 
+      // loop through rows, intermediary.push(row[colIndex]) - (linear time)
+      // reduce function (linear time)
+
+      var rows = this.rows();
+      // var count = 0;
+      var count = 0;
+      // looped through rows, if element === 1
+      for ( var i = 0; i < rows.length; i++ ) {
+        // if count > 1, return true;
+        if ( rows[i][colIndex] === 1 ) {
+          // increment count by one
+          count++;
+          if ( count > 1 ) {
+            return true;
+          }
+        }
+      }
       return false; // fixme
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
-      return false; // fixme
+      var rows = this.rows();
+      // loop through the rows
+      for ( var i = 0; i < rows.length; i++ ) {
+        // call the hasRowConflictAt(index of Rows) -> store in a variable called result
+        var result = this.hasColConflictAt(i);
+        // If result = true, then return true
+        if ( result ) {
+          return true;
+        }
+      }
+      return false;
     },
 
 
@@ -108,12 +154,62 @@
     // --------------------------------------------------------------
     //
     // test if a specific major diagonal on this board contains a conflict
+
+    // number of diagonals = 2n - 1
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
+      // Input -> column index at first row -3 to 3
+      var input = majorDiagonalColumnIndexAtFirstRow;
+      // Starting Point Code
+      var x = input; 
+      var y = 0;
+
+      // Cleaning up for negative columnindexatFirstRow
+      if (x < 0) {
+        x = 0;
+        y = -input; 
+      }
+      // Absolute distance from 0 and column at first row
+      var board = this.rows();
+      var length = board.length - Math.abs(input);
+
+      // Looping
+      // Count = 0;
+      var count = 0;
+      // loop with length of Loop Count
+      for (var i = 0; i < length; i++) {
+        // check if current vertices === 1
+        if (board[y][x] === 1) {
+          // count++
+          count++;
+          // If count > 1, return true
+          if (count > 1) {
+            return true;
+          }
+          // x++, y++;
+          x++;
+          y++;
+        }
+      }
       return false; // fixme
     },
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
+      var length = this.rows().length;
+      // starting point = negative (value of the length of the board - 1)
+      var start = - ( length - 2 );
+      // ending point = abs value of starting point
+      var end = length - 2;
+      // loop through the board 
+      for ( var i = start; i <= end; i++ ) {
+        // store the value of the invokation into a results variable
+        // invoke the conflict at function on current index
+        var result = this.hasMajorDiagonalConflictAt(i);
+        // if ( results ) is true return true
+        if ( result ) {
+          return true;
+        }
+      }
       return false; // fixme
     },
 
