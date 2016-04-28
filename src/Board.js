@@ -229,42 +229,62 @@
 
       // Starting Point
       // set our y to 0
+      var board = this.rows();
+      var input = minorDiagonalColumnIndexAtFirstRow;
+      var y = 0;
       // set our x to minorDiagonalColumnIndexAtFirstRow
+      var x = input;
 
       // largest diagonal point = n - 1
       // if x > ( n - 1 ) 
+      var n = this.rows().length; // n = 3
+      var middleIndex = n - 1;
+      if (x > n) {
         // x = largest diagonal point column 
+        x = middleIndex;
         // y = input - x 
+        y = input - x;
+      }
 
       // Find the iterations
       // distance = abs ( input - ( n - 1 ) )
+      var distance = Math.abs(input - middleIndex);
       // iterations = n - distance
+      var iterations = n - distance;
 
       // store a count variable at 0
+      var count = 0;
       // Loop
       // loop through every iteration
+      for (var i = 0; i < iterations; i++) {
         // if current value === 1
-          // increment count
-          // if count > 1 
-            // return true
-        // x--
-        // y++         
+        if (board[y][x] === 1) {
+          count++;
+          if (count > 1) {
+            return true;
+          }
+        }
+        x--;
+        y++;
+      }
 
       return false; // fixme
     },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      
       // set start to 0
-      // set end to 2n - 1 inclusive
+      var n = this.rows().length;
+      var start = 0;      
+      // set end to 2n - 1 exclusive
+      var end = 2 * n - 1;
 
-      // loop through the board
-        // call the conflict at funciton on current column or i
-        // store that in a result 
-        // if result is true 
-          // return true
-
+      for (var i = start; i < end; i++) {
+        var result = this.hasMinorDiagonalConflictAt(i);
+        if (result) {
+          return true;
+        }
+      }
       return false; // fixme
     }
 
