@@ -117,10 +117,53 @@ window.findNRooksSolution = function(n) {
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
-  var solutionCount = undefined; //fixme
+  // var solutionCount = undefined; //fixme
 
-  console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
+// Inputs (n)
+  // count variable
+  var solutionCount = 0;
+  // create an array w/ all the possible inputs
+  var choices = _.range(0, n);
+
+  var makeBoard = function(array, inputChoices) {
+    var length = inputChoices.length;
+      // loop for n count - var i    
+    if ( _.uniq(array).length === array.length ) {
+      for ( var i = 0; i < length; i++ ) {
+        // If array is unique, continue 
+        var newArray = array.concat(inputChoices[i]);
+        var newChoices = inputChoices.slice();
+        newChoices.splice(i, 1);
+        if ( _.uniq(newArray).length === newArray.length ) {
+          if ( newArray.length === n ) {
+            solutionCount++;
+          } else {
+            makeBoard(newArray, newChoices);
+          }
+        }
+      }
+    }
+  };
+
+  makeBoard([], choices);
   return solutionCount;
+
+  // Factorial Approach
+    // create factorial
+    // var factorial = function(x) {
+    //   if ( x === 1 ) {
+    //     return 1;
+    //   }
+    //   return x * factorial( x - 1 );
+    // };
+
+    // create a variable called combination
+    // n^2 factorial/ (n^2 - n) factorial / n factorial
+
+    // return factorial(n * n) / (factorial(n * n - n) * factorial(n));
+
+    // console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
+    // return solutionCount;
 };
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
