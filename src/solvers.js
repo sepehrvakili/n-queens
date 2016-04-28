@@ -127,20 +127,15 @@ window.countNRooksSolutions = function(n) {
 
   var makeBoard = function(array, inputChoices) {
     var length = inputChoices.length;
-      // loop for n count - var i    
-    if ( _.uniq(array).length === array.length ) {
-      for ( var i = 0; i < length; i++ ) {
-        // If array is unique, continue 
-        var newArray = array.concat(inputChoices[i]);
+    for ( var i = 0; i < length; i++ ) {
+      var newArray = array.concat(inputChoices[i]);
+      if ( newArray.length === n ) {
+        solutionCount++;
+      } else {
+        // improve performance by 18ms by moving new choices slice/splice to happen only if array is incomplete:
         var newChoices = inputChoices.slice();
         newChoices.splice(i, 1);
-        if ( _.uniq(newArray).length === newArray.length ) {
-          if ( newArray.length === n ) {
-            solutionCount++;
-          } else {
-            makeBoard(newArray, newChoices);
-          }
-        }
+        makeBoard(newArray, newChoices);
       }
     }
   };
@@ -168,16 +163,137 @@ window.countNRooksSolutions = function(n) {
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n) {
-  var solution = undefined; //fixme
+  
+  // create an array w/ all the possible inputs
+  var choices = _.range(0, n);
+  var findConflicts = function(array) {
+    var conflictLength = array.length - 1;
+    // loop through the array.length - 1
+    for ( var j = 0; j < conflictLength; j++ ) {
+      var lastIndex = conflictLength;
+      var calc = Math.abs( ( array[j] - array[lastIndex] ) / ( j - lastIndex ) );
+      // store the calculation of distance / value check 
+      // if that check is 1 set isConflict to true
+      if ( calc === 1 ) {
+        return true;
+      }
+    }
+    return false;
+  };
+  var makeBoard = function(array, inputChoices) {
+    var length = inputChoices.length;
+    // Check for diagonal conflicts:
+    // store the isConflict check in a variable 
+    var anyConflicts = findConflicts(array);
 
-  console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
-  return solution;
+    // if there is no conflict then we continue 
+    if ( !anyConflicts ) {
+      for ( var i = 0; i < length; i++ ) {
+        var newArray = array.concat(inputChoices[i]);
+        if ( newArray.length === n && !findConflicts(newArray) ) {
+          return newArray;
+        } else {
+          // improve performance by 18ms by moving new choices slice/splice to happen only if array is incomplete:
+          var newChoices = inputChoices.slice();
+          newChoices.splice(i, 1);
+          makeBoard(newArray, newChoices);
+        }
+      }      
+    }
+  };
+
+  if (n === 0) {
+    return 1;
+  }
+  if (n === 2 || n === 3) {
+    return 0;
+  }
+
+  makeBoard([], choices);
+    
+
+
+
+
+  // var solution = undefined; //fixme
+  // console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
+  // return solution;
 };
 
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
 window.countNQueensSolutions = function(n) {
-  var solutionCount = undefined; //fixme
 
-  console.log('Number of solutions for ' + n + ' queens:', solutionCount);
+// Inputs (n)
+  // count variable
+  var solutionCount = 0;
+  // create an array w/ all the possible inputs
+  var choices = _.range(0, n);
+  var findConflicts = function(array) {
+    var conflictLength = array.length - 1;
+    // loop through the array.length - 1
+    for ( var j = 0; j < conflictLength; j++ ) {
+      var lastIndex = conflictLength;
+      var calc = Math.abs( ( array[j] - array[lastIndex] ) / ( j - lastIndex ) );
+      // store the calculation of distance / value check 
+      // if that check is 1 set isConflict to true
+      if ( calc === 1 ) {
+        return true;
+      }
+    }
+    return false;
+  };
+  var makeBoard = function(array, inputChoices) {
+    var length = inputChoices.length;
+    // Check for diagonal conflicts:
+    // store the isConflict check in a variable 
+    var anyConflicts = findConflicts(array);
+
+    // if there is no conflict then we continue 
+    if ( !anyConflicts ) {
+      for ( var i = 0; i < length; i++ ) {
+        var newArray = array.concat(inputChoices[i]);
+        if ( newArray.length === n && !findConflicts(newArray) ) {
+          solutionCount++;
+        } else {
+          // improve performance by 18ms by moving new choices slice/splice to happen only if array is incomplete:
+          var newChoices = inputChoices.slice();
+          newChoices.splice(i, 1);
+          makeBoard(newArray, newChoices);
+        }
+      }      
+    }
+  };
+
+  if (n === 0) {
+    return 1;
+  }
+  if (n === 2 || n === 3) {
+    return 0;
+  }
+
+  makeBoard([], choices);
+    
   return solutionCount;
+
+
+  // var solutionCount = undefined; //fixme
+
+  // console.log('Number of solutions for ' + n + ' queens:', solutionCount);
+  // return solutionCount;
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
