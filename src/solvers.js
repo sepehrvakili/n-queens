@@ -54,46 +54,65 @@ window.findNRooksSolution = function(n) {
   var emptyBoard = new Board({n: n});
   var spaces = n * n;
   var length = n;
+  var board = emptyBoard.rows();
+
+  for ( var col = 0; col < n; col++ ) {
+    for ( var row = 0; row < n; row++ ) {
+      emptyBoard.togglePiece(row, col);
+      if ( emptyBoard.hasAnyRooksConflicts() ) {
+        emptyBoard.togglePiece(row, col);
+      } else {
+        break;
+      }
+      
+    }
+  }
+  return board;
 
   // addRooks Function (board, # of rooks)
-  var addRook = function(board, rookCount, position) {
-    // Fail case: Test if column and row pass
-    if ( !board.hasAnyRooksConflicts() ) {
-      // Base case:
-      if (rookCount === n) {
-        // When board has 3 rooks
-        // return current board
-        // console.log('returned');
-        // console.log(board.rows());
-        return board.rows();
-      } else {
-      // Recursive case:
-        // Add a rook to the board
-        while (position < spaces) {
-          var y = Math.floor(position / n);
-          var x = position % n;
-          var boardArrays = board.rows();  
-          boardArrays[y][x] = 1;
-          console.log(boardArrays);
-          var flatBoard = _.flatten(boardArrays);
-          rookCount = _.reduce(flatBoard, function(sum, num) { return sum + num; });
-          position++;
-          addRook(board, rookCount, position);
-        }
+  // var storage = [];
+
+  // var addRook = function(board, rookCount, position) {
+  //   // Fail case: Test if column and row pass
+  //   if ( !board.hasAnyRooksConflicts() ) {
+  //     // Base case:
+  //     if (rookCount === n) {
+  //       // When board has 3 rooks
+  //       // return current board
+  //       // console.log('returned');
+  //       console.log(JSON.stringify(board.rows()));
+  //       storage.push(board.rows());
+  //     } else {
+  //     // Recursive case:
+  //       // Add a rook to the board
+  //       while (position < spaces) {
+  //         var y = Math.floor(position / n);
+  //         var x = position % n;
+  //         var boardArrays = board.rows();  
+  //         boardArrays[y][x] = 1;
+  //         // console.log(boardArrays);
+  //         var flatBoard = _.flatten(boardArrays);
+  //         rookCount = _.reduce(flatBoard, function(sum, num) { return sum + num; });
+  //         console.log(position);
+  //         position++;
+  //         addRook(board, rookCount, position);
+  //       }
         
-        // addRooks(board, # of rooks, number)
-        // addRook(emptyBoard, 0, 0);
-      } 
-    }
-  };
-
-  addRook(emptyBoard, 0, 0);
+  //       // addRooks(board, # of rooks, number)
+  //       // addRook(emptyBoard, 0, 0);
+  //     } 
+  //   }
+  // };
+  // addRook(emptyBoard, 0, 0);
+  // return storage;
+  // for (var i = 0; i < n; i++) {
+  //   board[i][i] = 1;
+  // }
   
-  //var solution = addRook(emptyBoard, 0, 0);
-// Kick off recursion formula
+  // var solution = board;
 
-  //console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
-  //return solution;
+  // console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
+  // return solution;
 };
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
