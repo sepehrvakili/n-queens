@@ -159,18 +159,24 @@
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
       // Input -> column index at first row -3 to 3
       var input = majorDiagonalColumnIndexAtFirstRow;
-      // Starting Point Code
-      var x = input; 
+      // Starting Point Code 
+      //example: -1
+      // [0, 0, 0, 0]
+      // [1, 0, 0, 0]
+      // [0, 0, 0, 0]
+      // [0, 0, 1, 0]
+
+      var x = input; // -1
       var y = 0;
 
       // Cleaning up for negative columnindexatFirstRow
-      if (x < 0) {
-        x = 0;
-        y = -input; 
+      if (x < 0) { 
+        x = 0; // 0 // 1
+        y = -input; // 1 // 2 
       }
       // Absolute distance from 0 and column at first row
       var board = this.rows();
-      var length = board.length - Math.abs(input);
+      var length = board.length - Math.abs(input); // 4 - (1) = 3
 
       // Looping
       // Count = 0;
@@ -182,13 +188,13 @@
           // count++
           count++;
           // If count > 1, return true
-          if (count > 1) {
+          if ( count > 1 ) {
             return true;
           }
-          // x++, y++;
-          x++;
-          y++;
         }
+        // x++, y++;
+        x++;
+        y++;
       }
       return false; // fixme
     },
@@ -220,11 +226,45 @@
     //
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
+
+      // Starting Point
+      // set our y to 0
+      // set our x to minorDiagonalColumnIndexAtFirstRow
+
+      // largest diagonal point = n - 1
+      // if x > ( n - 1 ) 
+        // x = largest diagonal point column 
+        // y = input - x 
+
+      // Find the iterations
+      // distance = abs ( input - ( n - 1 ) )
+      // iterations = n - distance
+
+      // store a count variable at 0
+      // Loop
+      // loop through every iteration
+        // if current value === 1
+          // increment count
+          // if count > 1 
+            // return true
+        // x--
+        // y++         
+
       return false; // fixme
     },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
+      
+      // set start to 0
+      // set end to 2n - 1 inclusive
+
+      // loop through the board
+        // call the conflict at funciton on current column or i
+        // store that in a result 
+        // if result is true 
+          // return true
+
       return false; // fixme
     }
 
